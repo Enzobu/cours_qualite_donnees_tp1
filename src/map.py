@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+"""Génère une carte choroplèthe des crimes par quartier."""
+
 from pathlib import Path
 
 import pandas as pd         #type: ignore
@@ -13,8 +15,6 @@ GEOJSON = BASE_DIR / "data" / "BOUNDARY_CDDNeighborhoods.geojson"
 OUT_HTML = BASE_DIR / "data" / "map.html"
 
 
-# Correspondance référentiel Police -> GeoJSON
-# (à ajuster si tu constates des "orphelins" dans la console)
 NEIGHBORHOOD_TO_GEO = {
     "MIT": "Area 2/MIT",
     "Area 4": "The Port",
@@ -28,6 +28,7 @@ NEIGHBORHOOD_TO_GEO = {
 
 
 def main() -> None:
+    """Construit la carte et exporte un HTML."""
     if not DATA_CLEAN.exists():
         raise FileNotFoundError(f"Missing: {DATA_CLEAN}")
     if not GEOJSON.exists():
@@ -35,11 +36,9 @@ def main() -> None:
 
     df = pd.read_csv(DATA_CLEAN)
 
-    # Harmonisation : Neighborhood police -> Neighborhood_geo (nom du GeoJSON)
     df["Neighborhood"] = df["Neighborhood"].astype("string")
     df["Neighborhood_geo"] = df["Neighborhood"].map(NEIGHBORHOOD_TO_GEO).fillna(df["Neighborhood"])
 
-    # Agrégation (on ignore les NA)
     crimes_by_nb = (
         df.dropna(subset=["Neighborhood_geo"])
         .groupby("Neighborhood_geo", as_index=False)
@@ -47,7 +46,6 @@ def main() -> None:
         .rename(columns={"size": "crime_count"})
     )
 
-    # Contrôle : somme des crimes agrégés = nb de lignes avec un quartier exploitable
     expected = int(df["Neighborhood_geo"].notna().sum())
     got = int(crimes_by_nb["crime_count"].sum())
     if got != expected:
@@ -59,7 +57,6 @@ def main() -> None:
     merged = gdf.merge(crimes_by_nb, left_on=GEO_NAME_COL, right_on="Neighborhood_geo", how="left")
     merged["crime_count"] = merged["crime_count"].fillna(0).astype(int)
 
-    # Vérif : quartiers du CSV non trouvés dans le GeoJSON (après mapping)
     geo_names = set(gdf[GEO_NAME_COL].dropna().astype(str))
     orphans = crimes_by_nb.loc[~crimes_by_nb["Neighborhood_geo"].isin(geo_names), "Neighborhood_geo"]
     if not orphans.empty:
@@ -67,7 +64,6 @@ def main() -> None:
         for n in sorted(orphans.unique()):
             print(f"- {n}")
 
-    # Carte Folium
     m = folium.Map(location=[42.3736, -71.1097], zoom_start=13)
 
     folium.Choropleth(
