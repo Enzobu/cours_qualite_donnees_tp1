@@ -181,6 +181,29 @@ def main() -> None:
 
     df = pd.read_csv(DATA_IN)
 
+    print("\n=== PROFILAGE DU DATASET ===")
+
+    # Nombre de lignes
+    print(f"Nombre de lignes : {len(df)}")
+
+    # Types des colonnes
+    print("\nTypes des colonnes :")
+    print(df.dtypes)
+
+    # Valeurs manquantes par colonne
+    print("\nNombre de valeurs manquantes par colonne :")
+    print(df.isna().sum())
+
+    print("\n=== PROBLÈMES DE QUALITÉ IDENTIFIÉS ===")
+
+    print("    - Présence de doublons exacts dans le dataset.")
+    print("    - Identifiants File Number non uniques.")
+    print("    - Valeurs manquantes dans la colonne Crime.")
+    print("    - Dates de signalement invalides ou non parsables.")
+    print("    - Incohérences temporelles (Date of Report antérieure au début du crime).")
+    print("    - Quartiers hors référentiel officiel.")
+    print("    - Reporting Area non conforme.")
+
     print("\n=== AVANT NETTOYAGE (quelques indicateurs) ===")
     df_tmp = df.copy()
     df_tmp["Date of Report_parsed"] = parse_date_of_report(df_tmp["Date of Report"])
