@@ -80,6 +80,28 @@ Les actions suivantes sont réalisées :
   - incohérences temporelles
   - valeurs hors référentiel
 
+Le jeu de données initial contient **10 506 lignes** et **7 colonnes**.
+
+### Types des colonnes
+Les colonnes sont majoritairement de type texte (`object`), y compris pour des données temporelles et numériques, ce qui indique une absence de typage strict en amont.
+
+### Valeurs manquantes
+Des valeurs manquantes ont été identifiées, notamment :
+- `Crime`
+- `Neighborhood`
+- `Reporting Area`
+- `Location`
+
+### Problèmes de qualité identifiés
+L’exploration initiale a permis d’identifier plusieurs problèmes de qualité :
+- présence de doublons exacts,
+- identifiants `File Number` non uniques,
+- valeurs manquantes sur des champs critiques,
+- dates de signalement invalides,
+- incohérences temporelles entre la date de signalement et la date du crime,
+- quartiers hors référentiel officiel,
+- zones de signalement non conformes.
+
 ---
 
 ## 4. Dictionnaire des données
