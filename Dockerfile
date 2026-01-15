@@ -14,6 +14,7 @@ RUN echo "alias ll='ls -alH'" >> /root/.bashrc
 
 COPY requirements.txt .
 COPY src ./src
+COPY tests ./tests
 COPY entrypoint.sh ./entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
 

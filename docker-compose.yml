@@ -4,5 +4,6 @@ services:
     container_name: td1_cambridge_crime
     working_dir: /app
     volumes:
+      - ./logs:/app/logs
       - ./data:/app/data
     command: ["bash", "/app/entrypoint.sh"]
