@@ -72,6 +72,7 @@ def main() -> None:
         data=merged,
         columns=[GEO_NAME_COL, "crime_count"],
         key_on=f"feature.properties.{GEO_NAME_COL}",
+        fill_color="RdYlGn_r",
         fill_opacity=0.75,
         line_opacity=0.25,
         legend_name="Nombre de crimes",
