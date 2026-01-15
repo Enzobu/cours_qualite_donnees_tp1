@@ -2,3 +2,8 @@ pandas==2.2.2
 numpy==1.26.4
 python-dateutil==2.9.0.post0
 pytest==8.2.2
+geopandas==1.0.1
+shapely==2.0.5
+pyproj==3.6.1
+fiona==1.9.6
+folium==0.17.0
